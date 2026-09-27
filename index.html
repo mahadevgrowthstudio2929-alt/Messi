@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MESSI | Football Analysis</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% 6%, rgba(212, 175, 90, .16), transparent 36%),
+        radial-gradient(circle at 12% 88%, rgba(40, 130, 90, .14), transparent 32%),
+        #060907;
+      color: #fff;
+      font-family: "Inter", sans-serif;
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: auto;
+      padding: 22px 16px 24px;
+      position: relative;
+      overflow: hidden;
+      padding-top: calc(22px + env(safe-area-inset-top, 0px));
+      padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    }
+
+    .glow {
+      position: absolute;
+      width: 230px; height: 230px;
+      border-radius: 50%;
+      background: rgba(212, 175, 90, .12);
+      filter: blur(70px);
+      top: 20px; left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    /* status pill */
+    .status {
+      width: fit-content;
+      margin: 0 auto 18px;
+      padding: 7px 13px;
+      border: 1px solid rgba(90, 200, 130, .35);
+      border-radius: 50px;
+      background: rgba(255, 255, 255, .045);
+      backdrop-filter: blur(12px);
+      color: #a7e6bd;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 1.3px; text-transform: uppercase;
+      display: flex; align-items: center; gap: 7px;
+      box-shadow: 0 0 22px rgba(70, 200, 120, .1);
+    }
+
+    .dot {
+      width: 7px; height: 7px;
+      background: #3fe374; border-radius: 50%;
+      box-shadow: 0 0 10px #3fe374;
+      animation: blink 1.4s infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.35;transform:scale(.72);} }
+
+    /* logo */
+    .logo-wrap {
+      position: relative;
+      width: 112px; height: 112px;
+      margin: 4px auto 14px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-wrap::before {
+      content: "";
+      position: absolute; inset: -8px; border-radius: 50%;
+      background: conic-gradient(from 0deg, #d4af5a, #3fbf6f, #d4af5a, #2c9a58, #d4af5a);
+      animation: rotate 5s linear infinite;
+      filter: blur(7px); opacity: .75;
+    }
+    .logo-wrap::after {
+      content: ""; position: absolute; inset: -2px; border-radius: 50%; background: #090909;
+    }
+    .logo {
+      width: 102px; height: 102px; border-radius: 50%;
+      object-fit: cover; position: relative; z-index: 2;
+      border: 2px solid rgba(212, 175, 90, .85);
+      box-shadow: 0 0 20px rgba(212, 175, 90, .5), 0 0 45px rgba(63, 191, 111, .18);
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+
+    .brand { text-align: center; position: relative; z-index: 2; }
+    .brand h1 {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 42px; line-height: .95; font-weight: 800;
+      letter-spacing: .8px; text-transform: uppercase;
+      background: linear-gradient(180deg, #fff 15%, #f0cd7a 58%, #3fbf6f 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 25px rgba(212, 175, 90, .18);
+    }
+    .brand p {
+      margin-top: 8px; color: #a2ada4;
+      font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+    }
+
+    /* hero */
+    .hero { text-align: center; margin-top: 17px; }
+    .hero-title {
+      font-family: "Barlow Condensed", sans-serif;
+      font-size: 25px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .hero-title span { color: #f0cd7a; }
+    .hero-sub {
+      color: #9aa39c; font-size: 11.5px; line-height: 1.55;
+      max-width: 320px; margin: 8px auto 0;
+    }
+
+    /* highlights */
+    .highlights {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; margin-top: 19px;
+    }
+    .card {
+      min-height: 84px; padding: 12px 7px; border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, .08);
+      background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025));
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; text-align: center; transition: .3s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212, 175, 90, .4);
+      box-shadow: 0 8px 28px rgba(212, 175, 90, .12);
+    }
+    .card .icon { font-size: 18px; margin-bottom: 6px; }
+    .card strong { font-size: 11px; line-height: 1.15; color: #fff; }
+    .card small { margin-top: 4px; color: #f0cd7a; font-size: 8px; line-height: 1.2; }
+
+    /* live ticker */
+    .ticker {
+      margin-top: 16px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      overflow: hidden;
+    }
+    .ticker-inner {
+      display: flex; gap: 26px; white-space: nowrap;
+      padding: 10px 0;
+      animation: slide 15s linear infinite;
+      font-size: 11px; color: #9aa39c;
+    }
+    .ticker-inner b { color: #f0cd7a; font-weight: 600; }
+    @keyframes slide { 0%{transform:translateX(0);} 100%{transform:translateX(-50%);} }
+
+    /* trust */
+    .trust {
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      margin: 16px 0 14px; color: #bdbdbd; font-size: 10px;
+    }
+    .stars { color: #f0cd7a; letter-spacing: 1px; font-size: 12px; }
+
+    /* CTA */
+    .cta {
+      display: block; width: 100%; text-decoration: none;
+      position: relative; overflow: hidden; border-radius: 15px;
+      padding: 15px 18px; text-align: center;
+      background: linear-gradient(105deg, #2c9a58, #3fbf6f, #d4af5a);
+      color: #08120c; font-weight: 800; font-size: 14px; letter-spacing: .5px;
+      box-shadow: 0 8px 30px rgba(63, 191, 111, .28), inset 0 1px rgba(255,255,255,.45);
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .cta::before {
+      content: ""; position: absolute; top: 0; left: -80%;
+      width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+      transform: skewX(-20deg);
+      animation: shine 2.8s infinite;
+    }
+    @keyframes shine { 0%{left:-80%;} 55%,100%{left:130%;} }
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 38px rgba(63, 191, 111, .4), inset 0 1px rgba(255,255,255,.5);
+    }
+    .cta-main { position: relative; z-index: 2; }
+    .cta-sub {
+      display: block; margin-top: 3px; font-size: 8px; font-weight: 600;
+      opacity: .75; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    .footer {
+      text-align: center; color: #575757; font-size: 8px;
+      margin-top: 14px; letter-spacing: .5px;
+    }
+
+    @media (max-height: 700px) {
+      .page { padding-top: 15px; }
+      .status { margin-bottom: 11px; }
+      .logo-wrap { width: 92px; height: 92px; margin-bottom: 10px; }
+      .logo { width: 84px; height: 84px; }
+      .brand h1 { font-size: 36px; }
+      .hero { margin-top: 12px; }
+      .highlights { margin-top: 13px; }
+      .trust { margin: 12px 0 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dot, .cta::before, .logo-wrap::before, .ticker-inner { animation: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="glow"></div>
+
+    <div class="status">
+      <span class="dot"></span>
+      LIVE • FOOTBALL COMMUNITY
+    </div>
+
+    <div class="logo-wrap">
+      <img src="logo.png" alt="MESSI Logo" class="logo">
+    </div>
+
+    <section class="brand">
+      <h1>MESSI</h1>
+      <p>Football Analysis • Match Reports</p>
+    </section>
+
+    <section class="hero">
+      <h2 class="hero-title">
+        Read The Game <span>Before Anyone Else</span>
+      </h2>
+      <p class="hero-sub">
+        Tactical breakdowns, lineups &amp; live score alerts —
+        all in one fast-moving channel.
+      </p>
+    </section>
+
+    <section class="highlights">
+      <div class="card">
+        <div class="icon">👥</div>
+        <strong>12K+ Members</strong>
+        <small>Active Community</small>
+      </div>
+      <div class="card">
+        <div class="icon">⚽</div>
+        <strong>Match Analysis</strong>
+        <small>Tactical Insights</small>
+      </div>
+      <div class="card">
+        <div class="icon">⚡</div>
+        <strong>Live Alerts</strong>
+        <small>Real-Time Updates</small>
+      </div>
+    </section>
+
+    <div class="ticker">
+      <div class="ticker-inner">
+        <div>Press trigger breakdown — <b>posted 4m ago</b></div>
+        <div>Midfield rotation explained — <b>posted 22m ago</b></div>
+        <div>Injury update: 3 key players — <b>posted 1h ago</b></div>
+        <div>Press trigger breakdown — <b>posted 4m ago</b></div>
+        <div>Midfield rotation explained — <b>posted 22m ago</b></div>
+        <div>Injury update: 3 key players — <b>posted 1h ago</b></div>
+      </div>
+    </div>
+
+    <div class="trust">
+      <span class="stars">★★★★★</span>
+      <span>Trusted Football Community</span>
+    </div>
+
+    <a href="https://t.me/+narXDd9ZaItlOGE1" class="cta" target="_blank" rel="noopener noreferrer">
+      <span class="cta-main">🚀 JOIN THE MESSI COMMUNITY</span>
+      <span class="cta-sub">Get Football Updates on Telegram</span>
+    </a>
+
+    <div class="footer">MESSI • Football Analysis &amp; Reports</div>
+  </main>
+</body>
+</html>
